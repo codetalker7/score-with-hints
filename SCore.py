@@ -9,13 +9,19 @@ class SCore(Policy):
     selection. This policy does not use hints.
 
     Parameters:
+    `G`: Upper bound on the l2 norms of the vectors in the 1-cores of reward functions.
+    `time_horizon`: The time horizon, i.e the total number of iterations.
     `p`: Inclusion probability vector
     `cumulativeGradient`: Sum of all gradients observed till the current iteration.
+    `eta`: Learning rate, required for the optimization step.
     """
-    def __init__(self, N, k):
+    def __init__(self, N, k, G, time_horizon):
         super().__init__(N, k)
+        self.G = G
+        self.time_horizon = time_horizon
         self.p = np.ones(shape=self.N) * (k/N)
         self.cumulativeGradient = np.zeros(shape=self.N)
+        self.eta = math.sqrt((k*math.log(N/k))/(2*self.G*self.G*self.time_horizon))
 
     def getKSet(self, hint):
         return utils.MadowSample(self.p, self.N, self.k)
