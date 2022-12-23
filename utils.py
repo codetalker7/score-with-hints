@@ -13,6 +13,9 @@ def linearOptimize(cost):
     """
     pass
 
+def ftrlOptimize(cumulativeGradient):
+    pass
+
 def MadowSample(p, N, k):
     """
     Samples k elements from the set [N] using Madow's sampling
