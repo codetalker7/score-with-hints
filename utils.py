@@ -1,4 +1,7 @@
-def linearOptimize(cost):
+import math
+import numpy as np
+
+def linearOptimize(cost, N, k):
     """
     Performs linear optimization over the set of inclusion
     probability vectors, i.e the set of all vectors p such
@@ -11,10 +14,54 @@ def linearOptimize(cost):
     An inclusion probability vector p such that p*w is maximum. 
     Here p*w is the inner product of p and w.
     """
-    pass
+    p = np.zeros(shape=N, dtype=np.int_)
 
-def ftrlOptimize(cumulativeGradient):
-    pass
+    # get the indices which sort the cost vector
+    sorted_indices = np.argsort(cost)
+
+    # put 1 in the k largest indices of p
+    for i in range(N - k + 1, N):
+        p[sorted_indices[i]] = 1
+
+    return p
+
+
+def ftrlOptimize(cumulativeGradient, N, k, eta):
+    """
+    Performs the optimization step for the Follow the Regularized Leader
+    (FTRL) framework with entropic regularizer over the set of inclusion
+    probability vectors.
+
+    Arguments:
+    cumulativeGradient -- Total gradient seen until the previous iteration
+    N -- Size of the ground set
+    k -- Size of the subset to be picked
+    eta -- Learning rate
+    """
+    # sort cumulativeGradient in non-increasing order
+    orderedVector = -np.sort(-cumulativeGradient)
+
+    # finding i_star
+    i_star = N
+    tail_sum = 0
+    while i_star >= 1:
+        if (k - i_star)*math.exp(eta*orderedVector[i_star - 1]) >= tail_sum:
+            break
+        else:
+            tail_sum = tail_sum + math.exp(eta*orderedVector[i_star - 1])
+            i_star = i_star - 1
+
+    # computing K
+    if i_star == N:     # we will have k = N in this case
+        return np.ones(shape=N)
+
+    # assuming that i_star < N
+    K = (k - i_star)/tail_sum
+    p = np.zeros(shape=N)
+    for i in range(1, N + 1):
+        p[i - 1] = min(1, K*math.exp(eta*orderedVector[i - 1]))
+    return p
+
 
 def MadowSample(p, N, k):
     """
@@ -30,4 +77,13 @@ def MadowSample(p, N, k):
     Return value:
     Characteristic vector of the subset of [N] which is sampled.
     """
-    pass
+    pi = np.cumsum(np.insert(p, 0, 0))
+    U = np.random.uniform()
+    S = []
+
+    for i in range(0, k):
+        for j in range(1, N + 1):
+            if (pi[j - 1] <= U + i and U + i < pi[j]):
+                S.append(j)
+
+    return S
