@@ -38,4 +38,4 @@ class SCore(Policy):
         self.cumulativeGradient = self.cumulativeGradient + g
 
         # compute next probability vector
-        self.p = utils.ftrlOptimize(self.cumulativeGradient)
+        self.p = utils.ftrlOptimize(self.cumulativeGradient, self.N, self.k, self.eta)
