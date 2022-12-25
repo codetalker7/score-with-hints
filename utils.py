@@ -20,11 +20,10 @@ def linearOptimize(cost, N, k):
     sorted_indices = np.argsort(cost)
 
     # put 1 in the k largest indices of p
-    for i in range(N - k + 1, N):
+    for i in range(N - k, N):
         p[sorted_indices[i]] = 1
 
     return p
-
 
 def ftrlOptimize(cumulativeGradient, N, k, eta):
     """
@@ -83,7 +82,7 @@ def MadowSample(p, N, k):
 
     for i in range(0, k):
         for j in range(1, N + 1):
-            if (pi[j - 1] <= U + i and U + i < pi[j]):
+            if (pi[j - 1] <= U + i < pi[j]):
                 S.append(j)
 
     return S
