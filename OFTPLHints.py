@@ -10,15 +10,15 @@ class OFTPLHints(Policy):
     hints. Refer to the paper to understand the parameters.
 
     Parameters:
-    `C`: Should satisfy `self.C >= 11` and `2*self.c <= self.N`
+    `C`: Should satisfy `self.C >= 11` and `2*self.C <= self.N`
     `p`: Inclusion probability vector
     `eta`: Perturbation parameter
     `gamma`: Perturbation vector
     `cumulativeGradient`: Sum of all gradients observed till the current iteration.
     `l1errors`: Sum of the squares of the L1 norms between gradients and hints.
-    `scale`: Scale factor used to get calculate `eta`.
+    `scale`: Scale factor used to calculate `eta` in each iteration.
     """
-    def __init__(self, N, k, C, seed):
+    def __init__(self, N, k, C, seed=1):
         super().__init__(N, k)
         if C < 11 or 2*C > self.N:
             raise ValueError("The conditions C >= 11 and 2*C <= N must be satisfied!")
@@ -55,7 +55,9 @@ class OFTPLHints(Policy):
                 break
             else:
                 l1dist = l1hint + 1
+
         assert(l1dist != None)
+        assert(closestElement != None and 1 <= closestElement <= self.N)
 
         # set g to be the standard basis vector corresponding to
         # closestElement

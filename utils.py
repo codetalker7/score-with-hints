@@ -75,7 +75,7 @@ def MadowSample(p, N, k):
     k -- number of elements to sample
 
     Return value:
-    Characteristic vector of the subset of [N] which is sampled.
+    List of elements of [N] which are sampled.
     """
     pi = np.cumsum(np.insert(p, 0, 0))
     U = np.random.uniform()
