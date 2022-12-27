@@ -32,7 +32,7 @@ class OFTPLHints(Policy):
 
     def getKSet(self, hint):
         self.eta = self.scale*self.l1errors
-        self.p = utils.linearOptimize(self.cumulativeGradient + hint + self.eta*self.gamma)
+        self.p = utils.linearOptimize(self.cumulativeGradient + hint + self.eta*self.gamma, self.N, self.k)
         return utils.MadowSample(self.p, self.N, self.k)
 
     def feedReward(self, reward, hint):
