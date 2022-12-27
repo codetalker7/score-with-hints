@@ -86,3 +86,20 @@ def MadowSample(p, N, k):
                 S.append(j)
 
     return S
+
+def setIntersection(A, B):
+    """
+    Return 1 if A and B have non-empty intersection, otherwise return 0
+    """
+    if (set(A) & set(B)):
+        return 1
+    else:
+        return 0
+
+class DataLoader:
+    def __init__(self, N, k, time_horizon, ratedMovies, perfectHints):
+        self.N = N
+        self.k = k
+        self.time_horizon = time_horizon
+        self.ratedMovies = ratedMovies
+        self.perfectHints = perfectHints
