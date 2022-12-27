@@ -23,10 +23,10 @@ class SCore(Policy):
         self.cumulativeGradient = np.zeros(shape=self.N)
         self.eta = math.sqrt((k*math.log(N/k))/(2*self.G*self.G*self.time_horizon))
 
-    def getKSet(self, hint):
+    def getKSet(self, hint=None):
         return utils.MadowSample(self.p, self.N, self.k)
 
-    def feedReward(self, reward, hint):
+    def feedReward(self, reward, hint=None):
         self.T = self.T + 1
         element = reward[0]
 
