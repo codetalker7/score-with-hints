@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pickle
+from utils import DataLoader
 
 ratings_file = "data/ml-1m/ratings.dat"
 movies_file = "data/ml-1m/movies.dat"
@@ -17,7 +18,7 @@ numUsers = users["UserID"].max()
 
 # generating lists of movies and hints
 ratedMovies = []
-perfect_hints = []
+perfectHints = []
 for user in range(1, numUsers + 1):
     userMovies = ratings[ratings["UserID"] == user]
     listOfMovies = list(userMovies["MovieID"].unique())
@@ -26,13 +27,10 @@ for user in range(1, numUsers + 1):
 
     perfect_hint = np.zeros(shape=numMovies, dtype=np.int_)
     perfect_hint[listOfMovies[0] - 1] = 1
-    perfect_hints.append(perfect_hint)
+    perfectHints.append(perfect_hint)
     
 # serializing the objects
-with open("ratedMovies.pickle", 'wb') as file:
-    pickle.dump(ratedMovies, file, pickle.HIGHEST_PROTOCOL)
-
-with open("perfectHints.pickle", 'wb') as file:
-    pickle.dump(perfect_hints, file, pickle.HIGHEST_PROTOCOL)
-
+data = DataLoader(numMovies, numUsers, ratedMovies, perfectHints)
+with open("data.pickle", 'wb') as file:
+    pickle.dump(data, file, pickle.HIGHEST_PROTOCOL)
 
