@@ -97,9 +97,8 @@ def setIntersection(A, B):
         return 0
 
 class DataLoader:
-    def __init__(self, N, k, time_horizon, ratedMovies, perfectHints):
+    def __init__(self, N, time_horizon, ratedMovies, perfectHints):
         self.N = N
-        self.k = k
         self.time_horizon = time_horizon
         self.ratedMovies = ratedMovies
         self.perfectHints = perfectHints
