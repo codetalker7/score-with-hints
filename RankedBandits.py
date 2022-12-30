@@ -12,7 +12,7 @@ class RankedBandits(Policy):
         self.time_horizon = time_horizon
         # initialize k multi-armed bandits, each with N arms
         self.mabs = [MultiArmedBandit(self.N, self.time_horizon) for i in range(self.k)]
-        self.arms = np.zeros(shape=self.k)
+        self.arms = np.zeros(shape=self.k, dtype=np.int_)
         self.predictedSet = []
 
     def getKSet(self, hint=None):
@@ -63,5 +63,5 @@ class MultiArmedBandit:
         return np.random.choice(self.N, p=self.p) + 1
 
     def update(self, arm, reward):
-        self.weights[arm - 1] *= math.exp(self.gamma/(self.p[arm - 1]*self.N))
+        self.weights[arm - 1] *= math.exp((reward*self.gamma)/(self.p[arm - 1]*self.N))
 
