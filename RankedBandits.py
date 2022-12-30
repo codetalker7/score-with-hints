@@ -55,10 +55,13 @@ class MultiArmedBandit:
         self.N = N
         self.time_horizon = time_horizon
         self.gamma = min(1, math.sqrt((self.N*math.log(self.N))/((math.e - 1)*self.time_horizon)))
+        self.weights = np.ones(shape=self.N)
+        self.p = np.ones(shape=self.N)/N
 
     def selectArm(self):
-        pass
+        self.p = ((1 - self.gamma)/np.sum(self.weights))*self.weights + self.gamma/self.N
+        return np.random.choice(self.N, p=self.p) + 1
 
     def update(self, arm, reward):
-        pass
+        self.weights[arm - 1] *= math.exp(self.gamma/(self.p[arm - 1]*self.N))
 
