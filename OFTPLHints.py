@@ -7,18 +7,26 @@ class OFTPLHints(Policy):
     """
     This class implements the optimistic follow the perturbed
     leader policy for the subset selection problem, which utilizes
-    hints. Refer to the paper to understand the parameters.
-
-    Parameters:
-    `C`: Should satisfy `self.C >= 11` and `2*self.C <= self.N`
-    `p`: Inclusion probability vector
-    `eta`: Perturbation parameter
-    `gamma`: Perturbation vector
-    `cumulativeGradient`: Sum of all gradients observed till the current iteration.
-    `l1errors`: Sum of the squares of the L1 norms between gradients and hints.
-    `scale`: Scale factor used to calculate `eta` in each iteration.
+    hints. Refer to the paper to understand the parameters in the
+    constructor.
     """
     def __init__(self, N, k, C, seed=1):
+        """
+        This constructor initializes the following properties of the policy.
+
+        1. ``p``, the inclusion probability vector.
+        2. ``eta``, the perturbation parameter.
+        3. ``gamma``, the perturbation vector.
+        4. ``cumulativeGradient``, the sum of all gradients observed till a given iteration.
+        5. ``l1errors``, the sum of the squares of the L1 norms between gradients and hints.
+        6. ``scale``, the scale factor used to calculate ``eta`` in each iteration.
+
+        :param N: Number of elements in the ground set.
+        :param k: Size of the subsets to be selected in each iteration.
+        :param C: A parameter. Should satisfy ``C >= 11`` and ``2*C <= N``.
+
+        :raises ValueError: if the conditions ``C >= 11`` and ``2*C <= N`` are not satisfied.
+        """
         super().__init__(N, k)
         if C < 11 or 2*C > self.N:
             raise ValueError("The conditions C >= 11 and 2*C <= N must be satisfied!")

@@ -7,12 +7,12 @@ def linearOptimize(cost, N, k):
     probability vectors, i.e the set of all vectors p such
     that 0 <= p_i <= 1 for each i, and sum_{i} p_i = k.
 
-    Arguments: 
-    cost -- the cost vector
 
-    Return value:
-    An inclusion probability vector p such that p*w is maximum. 
-    Here p*w is the inner product of p and w.
+    :param cost: The cost vector.
+    :param N: The dimension of the underlying space.
+    :param k: Size of the subsets selected in each iteration.
+
+    :returns: An inclusion probability vector ``p`` such that ``p*w`` is maximum. Here ``p*w`` is the inner product of ``p`` and ``w``.
     """
     p = np.zeros(shape=N, dtype=np.int_)
 
@@ -31,11 +31,12 @@ def ftrlOptimize(cumulativeGradient, N, k, eta):
     (FTRL) framework with entropic regularizer over the set of inclusion
     probability vectors.
 
-    Arguments:
-    cumulativeGradient -- Total gradient seen until the previous iteration
-    N -- Size of the ground set
-    k -- Size of the subset to be picked
-    eta -- Learning rate
+    :param cumulativeGradient: Total gradient seen until the previous iteration.
+    :param N: Size of the ground set.
+    :param k: Size of the subset to be picked.
+    :param eta: Learning rate.
+
+    :returns: An inclusion probability vector ``p`` such that ``p*cumulativeGradient - p*log(p)`` is maximized.
     """
     # sort cumulativeGradient in non-increasing order
     orderedVector = -np.sort(-cumulativeGradient)
@@ -64,17 +65,16 @@ def ftrlOptimize(cumulativeGradient, N, k, eta):
 
 def MadowSample(p, N, k):
     """
-    Samples k elements from the set [N] using Madow's sampling
+    Samples ``k`` elements from the set ``[N]`` using Madow's sampling
     algorithm with inclusion probabilities given by the vector
-    p.
+    ``p``.
 
     Arguments: 
-    p -- inclusion probability vector
-    N -- size of the set to sample from
-    k -- number of elements to sample
+    :param p: Inclusion probability vector
+    :param N: Size of the set to sample from
+    :paran k: Number of elements to sample
 
-    Return value:
-    List of elements of [N] which are sampled.
+    :returns: List of elements of ``[N]`` which are sampled.
     """
     pi = np.cumsum(np.insert(p, 0, 0))
     U = np.random.uniform()
@@ -89,7 +89,12 @@ def MadowSample(p, N, k):
 
 def setIntersection(A, B):
     """
-    Return 1 if A and B have non-empty intersection, otherwise return 0
+    Determine whether ``A`` and ``B`` have non-empty intersection.
+
+    :param A: The first set
+    :param B: The second set
+
+    :returns: ``1``, if ``A`` and ``B`` intersect, and ``0`` otherwise.
     """
     if (set(A) & set(B)):
         return 1

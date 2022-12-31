@@ -7,15 +7,19 @@ class SCore(Policy):
     """
     This class implements the SCore policy for online subset
     selection. This policy does not use hints.
-
-    Parameters:
-    `G`: Upper bound on the l2 norms of the vectors in the 1-cores of reward functions.
-    `time_horizon`: The time horizon, i.e the total number of iterations.
-    `p`: Inclusion probability vector
-    `cumulativeGradient`: Sum of all gradients observed till the current iteration.
-    `eta`: Learning rate, required for the optimization step.
     """
     def __init__(self, N, k, G, time_horizon):
+        """
+        This constructor initializes the following properties of the policy.
+        1. ``p``, the inclusion probability vector.
+        2. ``cumulativeGradient``, sum of all gradients observed till the current iteration.
+        3. ``eta``, learning rate, which is required for the optimization step.
+
+        :param N: Number of elements in the ground set.
+        :param k: Size of the subsets to be selected in each iteration.
+        :param G: Upper bound on the L2 norms of the vectors in the 1-cores of reward functions.
+        :param time_horizon: The time horizon, i.e the total number of iterations.
+        """
         super().__init__(N, k)
         self.G = G
         self.time_horizon = time_horizon
