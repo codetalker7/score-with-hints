@@ -8,6 +8,17 @@ class RankedBandits(Policy):
     with multi-armed bandits. This algorithm does not utilize hints.
     """
     def __init__(self, N, k, time_horizon):
+        """
+        This constructor initializes the following properties of the policy.
+
+        1. ``mabs``, a list of ``k`` multi-armed bandits trained using the EXP3 algorithm.
+        2. ``arms``, a ``numpy.array`` of arms selected in an iteration by each of the multi-armed bandits.
+        3. ``predictedSet``, a ``k``-sized list of elements picked by the policy.
+
+        :param N: Number of elements in the ground set.
+        :param k: Size of the subsets to be selected in each iteration.
+        :param time_horizon: The time horizon, i.e the total number of iterations.
+        """
         super().__init__(N, k)
         self.time_horizon = time_horizon
         # initialize k multi-armed bandits, each with N arms
@@ -52,6 +63,12 @@ class MultiArmedBandit:
     Multi-Armed Bandit trained using the EXP3 algorithm.
     """
     def __init__(self, N, time_horizon):
+        """
+        This constructor initializes a multi-armed bandit.
+
+        :param N: Number of elements in the choice set.
+        :param time_horizon: The time horizon, i.e the number of iterations.
+        """
         self.N = N
         self.time_horizon = time_horizon
         self.gamma = min(1, math.sqrt((self.N*math.log(self.N))/((math.e - 1)*self.time_horizon)))
@@ -59,9 +76,18 @@ class MultiArmedBandit:
         self.p = np.ones(shape=self.N)/N
 
     def selectArm(self):
+        """
+        Make the next prediction.
+        """
         self.p = ((1 - self.gamma)/np.sum(self.weights))*self.weights + self.gamma/self.N
         return np.random.choice(self.N, p=self.p) + 1
 
     def update(self, arm, reward):
+        """
+        Do the EXP3 update step.
+
+        :param arm: Most recent prediction made by the multi-armed bandit.
+        :param reward: The reward for the prediction.
+        """
         self.weights[arm - 1] *= math.exp((reward*self.gamma)/(self.p[arm - 1]*self.N))
 
